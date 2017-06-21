@@ -89,6 +89,7 @@ namespace Common
                 public const string CASH_OUT_URL = LOCATION + "/advice/receive/co";
             }
         }
+
         public static class ISSUER
         {
             public const string CASH_IN_REQUEST_URL = "/cashinrequest";
@@ -97,6 +98,37 @@ namespace Common
             public const string CASH_OUT_GET_REQUEST_URL = "/cashoutrequest/{statusIndentifier}";
             public const string MERCHANT_PAYMENT_REQUEST_URL = "/cashinrequest";
             public const string MERCHANT_PAYMENT_GET_REQUEST_URL = "/cashinrequest/{statusIndentifier}";
+
+            /// <summary>
+            /// Based on Visa Developer Document 2017
+            /// </summary>
+            enum HTTP_STATUS_CODE {
+                SUCCESS = 200,
+                TIME_OUT = 202,
+                DUPLICATE_TRANSACTION = 303,
+                REJECTED_DUE_TO_VALIDATION = 400,
+                WRONG_USER_CREDENTIALS = 401,
+                WRONG_CERTIFICATE = 401,
+                URL_NOT_PERMITTED = 403,
+                RESOURCE_NOT_FOUND = 404,
+                INVALID_PAN = 404,
+                INTERNAL_SERVER_ERROR = 500,
+                DUE_TO_CONNECTIVITY = 503,
+                TIME_OUT_DUE_TO_CONNECTIVITY = 504
+            }
+
+            /// <summary>
+            /// Based on Visa Document 2017 
+            /// </summary>
+            enum ERROR_CODE {
+                _3001 = 3001,
+                _9123 = 9123,
+                _9124 = 9124,
+                _9125 = 9125,
+                _9611 = 9611,
+                _1001 = 1001,
+                _2001 = 2001,
+            }
         }
 
         public static class EXCEPTIONS_MESSAGE

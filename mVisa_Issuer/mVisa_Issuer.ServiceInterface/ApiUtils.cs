@@ -14,11 +14,6 @@ namespace mVisa_Issuer.ServiceInterface
     {
         private static IAppSettings AppSettings = new AppSettings();
         private static ILog Log = LogManager.GetLogger(typeof(ApiUtils));
-        private static int timeOut;
-        
-        static ApiUtils() {
-            timeOut = AppSettings.Get(Constants.TIME_OUT,Constants.DEFAULT_TIME_OUT);
-        }
 
         public static async Task<T> Post<T>(this string resource, object content) {
             var url = $"{MVisaEndpoint()}{resource}";
@@ -38,10 +33,7 @@ namespace mVisa_Issuer.ServiceInterface
                 var task = isPost
                     ? url.PostJsonToUrlAsync(content, requestFilter: webReq => webReq.DoAuth())
                     : url.GetJsonFromUrlAsync(requestFilter: webReq => webReq.DoAuth());
-                if (await Task.WhenAny(task, Task.Delay(timeOut)) == task) {
                     return (await task).FromJson<T>();
-                }
-                throw new TimeoutException();
             } catch (Exception ex) {
                 Log.Error(ex.ToString());
                 var innerException = ex.InnerException;
@@ -70,10 +62,8 @@ namespace mVisa_Issuer.ServiceInterface
                 GetCurrentClientCertificate()
             };
             webReq.ClientCertificates = clientCertificates;
-
             webReq.Headers[Constants.AUTHORIZATION] = AppSettings.Get<string>(Constants.AUTHORIZATION);
             webReq.Accept = Constants.JSON_ACCEPT_HEADER;
-
             Log.Info($"web request : {webReq.ToJson()}");
         }
     }

@@ -25,8 +25,7 @@ namespace Common
         public const string HOUR_2_DIGITS = "([0-1]{1}[0-9]{1})|(2[0-3]{1})";
         public const string POST = "POST";
         public const string GET = "GET";
-        public const string TIME_OUT = "timeOut";
-        public const int DEFAULT_TIME_OUT = 10000; //in miliseconds
+
         /// <summary>
         /// Simulation purpose only
         ///     Pan numbers for testing: 

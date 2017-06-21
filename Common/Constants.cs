@@ -102,7 +102,7 @@ namespace Common
             /// <summary>
             /// Based on Visa Developer Document 2017
             /// </summary>
-            enum HTTP_STATUS_CODE {
+            public enum HTTP_STATUS_CODE {
                 SUCCESS = 200,
                 TIME_OUT = 202,
                 DUPLICATE_TRANSACTION = 303,
@@ -120,7 +120,7 @@ namespace Common
             /// <summary>
             /// Based on Visa Document 2017 
             /// </summary>
-            enum ERROR_CODE {
+            public enum ERROR_CODE {
                 _3001 = 3001,
                 _9123 = 9123,
                 _9124 = 9124,

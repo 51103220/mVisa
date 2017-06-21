@@ -90,5 +90,45 @@ namespace Utils
         {
             return str == null || str.Equals(string.Empty);
         }
+
+        public static ISSUER.HTTP_STATUS_CODE DetectHttpStatus(int statusCode, int? errorCode){
+            switch (statusCode) {
+                case (int) ISSUER.HTTP_STATUS_CODE.SUCCESS:
+                    return ISSUER.HTTP_STATUS_CODE.SUCCESS;
+                case (int) ISSUER.HTTP_STATUS_CODE.TIME_OUT:
+                    return ISSUER.HTTP_STATUS_CODE.TIME_OUT;
+                case (int) ISSUER.HTTP_STATUS_CODE.DUPLICATE_TRANSACTION:
+                    return ISSUER.HTTP_STATUS_CODE.DUPLICATE_TRANSACTION;
+                case (int) ISSUER.HTTP_STATUS_CODE.REJECTED_DUE_TO_VALIDATION:
+                    return ISSUER.HTTP_STATUS_CODE.REJECTED_DUE_TO_VALIDATION;
+                case (int)ISSUER.HTTP_STATUS_CODE.URL_NOT_PERMITTED:
+                    return ISSUER.HTTP_STATUS_CODE.URL_NOT_PERMITTED;
+                case (int)ISSUER.HTTP_STATUS_CODE.INTERNAL_SERVER_ERROR:
+                    return ISSUER.HTTP_STATUS_CODE.INTERNAL_SERVER_ERROR;
+                case (int)ISSUER.HTTP_STATUS_CODE.DUE_TO_CONNECTIVITY:
+                    return ISSUER.HTTP_STATUS_CODE.DUE_TO_CONNECTIVITY;
+                case (int)ISSUER.HTTP_STATUS_CODE.TIME_OUT_DUE_TO_CONNECTIVITY:
+                    return ISSUER.HTTP_STATUS_CODE.TIME_OUT_DUE_TO_CONNECTIVITY;
+
+                case (int) ISSUER.HTTP_STATUS_CODE.WRONG_USER_CREDENTIALS:
+                    switch (errorCode) {
+                        case (int) ISSUER.ERROR_CODE._9125:
+                            return ISSUER.HTTP_STATUS_CODE.WRONG_CERTIFICATE;
+                        default:
+                            return ISSUER.HTTP_STATUS_CODE.WRONG_USER_CREDENTIALS;
+                    }
+                    
+                case (int) ISSUER.HTTP_STATUS_CODE.RESOURCE_NOT_FOUND:
+                    switch (errorCode) {
+                        case (int) ISSUER.ERROR_CODE._3001:
+                            return ISSUER.HTTP_STATUS_CODE.INVALID_PAN;
+                        default:
+                            return ISSUER.HTTP_STATUS_CODE.RESOURCE_NOT_FOUND;
+                    }
+
+                default:
+                    return ISSUER.HTTP_STATUS_CODE.SUCCESS;
+            }
+        }
     }
 }

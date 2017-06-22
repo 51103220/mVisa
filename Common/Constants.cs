@@ -91,12 +91,9 @@ namespace Common
 
         public static class ISSUER
         {
-            public const string CASH_IN_REQUEST_URL = "/cashinrequest";
-            public const string CASH_IN_GET_REQUEST_URL = "/cashinrequest/{statusIdentifier}";
-            public const string CASH_OUT_REQUEST_URL = "/cashoutrequest";
-            public const string CASH_OUT_GET_REQUEST_URL = "/cashoutrequest/{statusIndentifier}";
-            public const string MERCHANT_PAYMENT_REQUEST_URL = "/cashinrequest";
-            public const string MERCHANT_PAYMENT_GET_REQUEST_URL = "/cashinrequest/{statusIndentifier}";
+            public const string CASH_IN_REQUEST_URL = "/ci";
+            public const string CASH_OUT_REQUEST_URL = "/co";
+            public const string MERCHANT_PAYMENT_REQUEST_URL = "/p2m";
 
             /// <summary>
             /// Based on Visa Developer Document 2017

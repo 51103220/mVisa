@@ -1,13 +1,14 @@
-﻿using ServiceStack;
+﻿using Common.DTOs.Request;
+using ServiceStack;
+using System.Runtime.Serialization;
 using static Common.Constants;
 
 namespace mVisa_Issuer.ServiceModel
 {
     [Route(ISSUER.CASH_OUT_REQUEST_URL, POST)]
-    [Route(ISSUER.CASH_OUT_GET_REQUEST_URL, GET)]
-    public class IssuerCashOutRequest : IReturn<IssuerCashOutResponse>
+    [DataContract]
+    public class IssuerCashOutRequest : CashOutRequestDto, IReturn<IssuerCashOutResponse>
     {
-        public string StatusIdentifier { get; set; }
     }
 
     public class IssuerCashOutResponse

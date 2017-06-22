@@ -21,38 +21,15 @@ namespace mVisa_Issuer.ServiceInterface
             return new IssuerCashInResponse { Result = response?.ToJson() };
         }
 
-        public async Task<IssuerCashInResponse> Get(IssuerCashInRequest request)
-        {
-            var resource = $"{M_VISA.CASH_IN_PUSH_PAYMENT_URL}/{request?.StatusIdentifier}";
-            var response = await resource.Get<CashInResponseDto>();
-            return new IssuerCashInResponse { Result = response?.ToJson() };
-        }
-
         public async Task<IssuerCashOutResponse> Post(IssuerCashOutRequest request)
         {
-            var cashOutRequest = DummyDtoServices.NewCashOutRequestDto();
-            var response = await M_VISA.CASH_OUT_PUSH_PAYMENT_URL.Post<CashOutResponseDto>(cashOutRequest);                              
-            return new IssuerCashOutResponse { Result = response?.ToJson() };
-        }
-
-        public async Task<IssuerCashOutResponse> Get(IssuerCashOutRequest request)
-        {
-            var resource = $"{M_VISA.CASH_OUT_PUSH_PAYMENT_URL}/{request?.StatusIdentifier}";
-            var response = await resource.Get<CashOutResponseDto>();
+            var response = await M_VISA.CASH_OUT_PUSH_PAYMENT_URL.Post<CashOutResponseDto>(request);                              
             return new IssuerCashOutResponse { Result = response?.ToJson() };
         }
 
         public async Task<IssuerMerchantPaymentResponse> Post(IssuerMerchantPaymentRequest request)
         {
-            var merchantPaymentRequest = DummyDtoServices.NewMerchantPaymentRequestDto();
-            var response = await M_VISA.MERCHANT_PUSH_PAYMENT_URL.Post<MerchantPaymentResponseDto>(merchantPaymentRequest);
-            return new IssuerMerchantPaymentResponse { Result = response?.ToJson() };
-        }
-
-        public async Task<IssuerMerchantPaymentResponse> Get(IssuerMerchantPaymentRequest request)
-        {
-            var resource = $"{M_VISA.MERCHANT_PUSH_PAYMENT_URL}/{request?.StatusIdentifier}";
-            var response = await resource.Get<MerchantPaymentResponseDto>();
+            var response = await M_VISA.MERCHANT_PUSH_PAYMENT_URL.Post<MerchantPaymentResponseDto>(request);
             return new IssuerMerchantPaymentResponse { Result = response?.ToJson() };
         }
 

@@ -7,7 +7,7 @@ namespace Common.DTOs.Request
     public class MerchantPaymentRequestDto : BaseRequestDto
     {
         [DataMember(Name = "transactionFeeAmt")]
-        public int TransactionFeeAmt { get; set; }
+        public string TransactionFeeAmt { get; set; }
 
         [DataMember(Name = "purchaseIdentifier")]
         public PurchaseIdentifier PurchaseIdentifier { get; set; } = new PurchaseIdentifier();

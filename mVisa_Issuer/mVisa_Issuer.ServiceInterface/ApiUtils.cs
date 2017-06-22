@@ -53,17 +53,15 @@ namespace mVisa_Issuer.ServiceInterface
         private static X509Certificate GetCurrentClientCertificate() {
             var certificatePath = AppSettings.Get<string>(Constants.CERTIFICATE_PATH);
             var certificatePassword = AppSettings.Get<string>(Constants.CERTIFICATE_PASSWORD);
-            return new X509Certificate(certificatePath, certificatePassword, 
-                X509KeyStorageFlags.MachineKeySet | X509KeyStorageFlags.PersistKeySet);
+            return new X509Certificate(certificatePath, certificatePassword, X509KeyStorageFlags.MachineKeySet | X509KeyStorageFlags.PersistKeySet);
         }
 
         private static void DoAuth(this HttpWebRequest webReq) {
-            var clientCertificates = new X509CertificateCollection {
-                GetCurrentClientCertificate()
-            };
-            webReq.ClientCertificates = clientCertificates;
             webReq.Headers[Constants.AUTHORIZATION] = AppSettings.Get<string>(Constants.AUTHORIZATION);
             webReq.Accept = Constants.JSON_ACCEPT_HEADER;
+            webReq.ClientCertificates = new X509CertificateCollection {
+                GetCurrentClientCertificate()
+            };
             Log.Info($"web request : {webReq.ToJson()}");
         }
     }

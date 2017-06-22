@@ -13,17 +13,25 @@ namespace mVisa_Issuer.ServiceInterface
     public static class ApiUtils
     {
         private static IAppSettings AppSettings = new AppSettings();
+        private static string endPoint = AppSettings.Get<string>(Constants.M_VISA.ENDPOINT);
         private static ILog Log = LogManager.GetLogger(typeof(ApiUtils));
+        private static X509CertificateCollection clientCertificates;
+
+        static ApiUtils() {
+            clientCertificates = new X509CertificateCollection {
+                GetCurrentClientCertificate()
+            };
+        }
 
         public static async Task<T> Post<T>(this string resource, object content) {
-            var url = $"{MVisaEndpoint()}{resource}";
+            var url = $"{endPoint}{resource}";
             Log.Info($"posting : {url}");
             Log.Info($"content : {content.ToJson()}");
             return await url.Process<T>(true, content);
         }
 
         public static async Task<T> Get<T>(this string resource) {
-            var url = $"{MVisaEndpoint()}{resource}";
+            var url = $"{endPoint}{resource}";
             Log.Info($"get : {url}");
             return await url.Process<T>();
         }
@@ -46,22 +54,17 @@ namespace mVisa_Issuer.ServiceInterface
             return default(T);
         }
 
-        private static string MVisaEndpoint() {
-            return AppSettings.Get<string>(Constants.M_VISA.ENDPOINT);
-        }
-
         private static X509Certificate GetCurrentClientCertificate() {
             var certificatePath = AppSettings.Get<string>(Constants.CERTIFICATE_PATH);
             var certificatePassword = AppSettings.Get<string>(Constants.CERTIFICATE_PASSWORD);
-            return new X509Certificate(certificatePath, certificatePassword, X509KeyStorageFlags.MachineKeySet | X509KeyStorageFlags.PersistKeySet);
+            return new X509Certificate(certificatePath, certificatePassword, 
+                X509KeyStorageFlags.MachineKeySet | X509KeyStorageFlags.PersistKeySet);
         }
 
         private static void DoAuth(this HttpWebRequest webReq) {
             webReq.Headers[Constants.AUTHORIZATION] = AppSettings.Get<string>(Constants.AUTHORIZATION);
             webReq.Accept = Constants.JSON_ACCEPT_HEADER;
-            webReq.ClientCertificates = new X509CertificateCollection {
-                GetCurrentClientCertificate()
-            };
+            webReq.ClientCertificates = clientCertificates;
             Log.Info($"web request : {webReq.ToJson()}");
         }
     }

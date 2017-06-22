@@ -49,6 +49,7 @@ namespace Common
             public const string USER_AGENT = "User-Agent";
             public const string VIA = "Via";
             public const string FORWARDED = "Forwarded";
+            public const string X_TRANSACTION_TIMEOUT_MS = "X-Transaction-Timeout-MS";
         }
 
         public static class M_VISA

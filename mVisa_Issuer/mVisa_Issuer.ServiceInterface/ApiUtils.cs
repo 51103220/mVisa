@@ -12,12 +12,18 @@ namespace mVisa_Issuer.ServiceInterface
 {
     public static class ApiUtils
     {
-        private static IAppSettings AppSettings = new AppSettings();
-        private static string endPoint = AppSettings.Get<string>(Constants.M_VISA.ENDPOINT);
-        private static ILog Log = LogManager.GetLogger(typeof(ApiUtils));
+        private static IAppSettings appSettings;
+        private static string endPoint;
+        private static string authorization;
+        private static string transaction_timeout;
         private static X509CertificateCollection clientCertificates;
-
+        private static ILog Log = LogManager.GetLogger(typeof(ApiUtils));
+       
         static ApiUtils() {
+            appSettings = new AppSettings();
+            endPoint = appSettings.Get<string>(Constants.M_VISA.ENDPOINT);
+            authorization = appSettings.Get<string>(Constants.AUTHORIZATION);
+            transaction_timeout = appSettings.Get<string>(Constants.HTTP_HEADER.X_TRANSACTION_TIMEOUT_MS);
             clientCertificates = new X509CertificateCollection {
                 GetCurrentClientCertificate()
             };
@@ -46,7 +52,10 @@ namespace mVisa_Issuer.ServiceInterface
                 Log.Error(ex.ToString());
                 var innerException = ex.InnerException;
                 if (innerException is WebException) {
-                    var resp = new StreamReader(((WebException) innerException).Response.GetResponseStream()).ReadToEnd();
+                    var resp = new StreamReader(((WebException) innerException)
+                        .Response
+                        .GetResponseStream())
+                        .ReadToEnd();
                     Log.Error(((WebException) innerException).Status);
                     Log.Error(resp);
                 }
@@ -55,14 +64,15 @@ namespace mVisa_Issuer.ServiceInterface
         }
 
         private static X509Certificate GetCurrentClientCertificate() {
-            var certificatePath = AppSettings.Get<string>(Constants.CERTIFICATE_PATH);
-            var certificatePassword = AppSettings.Get<string>(Constants.CERTIFICATE_PASSWORD);
+            var certificatePath = appSettings.Get<string>(Constants.CERTIFICATE_PATH);
+            var certificatePassword = appSettings.Get<string>(Constants.CERTIFICATE_PASSWORD);
             return new X509Certificate(certificatePath, certificatePassword, 
                 X509KeyStorageFlags.MachineKeySet | X509KeyStorageFlags.PersistKeySet);
         }
 
         private static void DoAuth(this HttpWebRequest webReq) {
-            webReq.Headers[Constants.AUTHORIZATION] = AppSettings.Get<string>(Constants.AUTHORIZATION);
+            webReq.Headers[Constants.AUTHORIZATION] = authorization;
+            webReq.Headers[Constants.HTTP_HEADER.X_TRANSACTION_TIMEOUT_MS] = transaction_timeout;
             webReq.Accept = Constants.JSON_ACCEPT_HEADER;
             webReq.ClientCertificates = clientCertificates;
             Log.Info($"web request : {webReq.ToJson()}");

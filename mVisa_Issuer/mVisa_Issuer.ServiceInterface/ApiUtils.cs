@@ -52,12 +52,7 @@ namespace mVisa_Issuer.ServiceInterface
                 Log.Error(ex.ToString());
                 var innerException = ex.InnerException;
                 if (innerException is WebException) {
-                    var resp = new StreamReader(((WebException) innerException)
-                        .Response
-                        .GetResponseStream())
-                        .ReadToEnd();
-                    Log.Error(((WebException) innerException).Status);
-                    Log.Error(resp);
+                    return await ((WebException)innerException).ProcessErrorResponse<T>(url, isPost);
                 }
             }
             return default(T);

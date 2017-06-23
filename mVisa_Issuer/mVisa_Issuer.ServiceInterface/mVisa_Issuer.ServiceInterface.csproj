@@ -78,8 +78,16 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ApiUtils.cs" />
+    <Compile Include="Exceptions\UnableToIdentifyErrorException.cs" />
+    <Compile Include="Exceptions\UrlNotExistsException.cs" />
+    <Compile Include="Exceptions\TransactionStatusIsNotKnownException.cs" />
+    <Compile Include="Exceptions\GETRequestHasBeenSentException.cs" />
+    <Compile Include="Exceptions\ErrorResponseException.cs" />
+    <Compile Include="Exceptions\DuplicateTransactionException.cs" />
+    <Compile Include="Exceptions\TimeOutResponseException.cs" />
     <Compile Include="IssuerServices.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="WebExceptionHandler.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

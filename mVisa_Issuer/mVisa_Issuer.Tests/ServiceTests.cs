@@ -4,15 +4,17 @@ using ServiceStack;
 using ServiceStack.Testing;
 using mVisa_Issuer.ServiceModel;
 using mVisa_Issuer.ServiceInterface;
+using ServiceStack.Configuration;
 
 namespace mVisa_Issuer.Tests
 {
     [TestFixture]
-    public class UnitTests
+    public class ServiceTests
     {
         private readonly ServiceStackHost appHost;
+        private IAppSettings appSettings;
 
-        public UnitTests()
+        public ServiceTests()
         {
             appHost = new BasicAppHost(typeof(IssuerServices).Assembly)
             {
@@ -31,13 +33,13 @@ namespace mVisa_Issuer.Tests
         }
 
         [Test]
-        public void Test_Method1()
+        public void OCT_Timeout_260000()
         {
             var service = appHost.Container.Resolve<IssuerServices>();
 
-           //var response = (HelloResponse)service.Any(new Hello { Name = "World" });
+            var response = "Hello";
 
-            //Assert.That(response.Result, Is.EqualTo("Hello, World!"));
+            Assert.That(response, Is.EqualTo("Hello, World!"));
         }
     }
 }

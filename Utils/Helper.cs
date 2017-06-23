@@ -1,7 +1,7 @@
-﻿using Common.DTOs.Receive.Base;
-using System;
+﻿using System;
 using System.Globalization;
 using System.Linq;
+using System.Text.RegularExpressions;
 using static Common.Constants;
 
 namespace Utils
@@ -91,44 +91,61 @@ namespace Utils
             return str == null || str.Equals(string.Empty);
         }
 
-        public static ISSUER.HTTP_STATUS_CODE DetectHttpStatus(int statusCode, int? errorCode){
+        public static ISSUER.HTTP_STATUS DetectHttpStatus(int statusCode, int? errorCode){
             switch (statusCode) {
-                case (int) ISSUER.HTTP_STATUS_CODE.SUCCESS:
-                    return ISSUER.HTTP_STATUS_CODE.SUCCESS;
-                case (int) ISSUER.HTTP_STATUS_CODE.TIME_OUT:
-                    return ISSUER.HTTP_STATUS_CODE.TIME_OUT;
-                case (int) ISSUER.HTTP_STATUS_CODE.DUPLICATE_TRANSACTION:
-                    return ISSUER.HTTP_STATUS_CODE.DUPLICATE_TRANSACTION;
-                case (int) ISSUER.HTTP_STATUS_CODE.REJECTED_DUE_TO_VALIDATION:
-                    return ISSUER.HTTP_STATUS_CODE.REJECTED_DUE_TO_VALIDATION;
-                case (int)ISSUER.HTTP_STATUS_CODE.URL_NOT_PERMITTED:
-                    return ISSUER.HTTP_STATUS_CODE.URL_NOT_PERMITTED;
-                case (int)ISSUER.HTTP_STATUS_CODE.INTERNAL_SERVER_ERROR:
-                    return ISSUER.HTTP_STATUS_CODE.INTERNAL_SERVER_ERROR;
-                case (int)ISSUER.HTTP_STATUS_CODE.DUE_TO_CONNECTIVITY:
-                    return ISSUER.HTTP_STATUS_CODE.DUE_TO_CONNECTIVITY;
-                case (int)ISSUER.HTTP_STATUS_CODE.TIME_OUT_DUE_TO_CONNECTIVITY:
-                    return ISSUER.HTTP_STATUS_CODE.TIME_OUT_DUE_TO_CONNECTIVITY;
+                case (int) ISSUER.HTTP_STATUS_CODE._200:
+                    return ISSUER.HTTP_STATUS.SUCCESS;
+                case (int) ISSUER.HTTP_STATUS_CODE._202:
+                    return ISSUER.HTTP_STATUS.TIME_OUT;
+                case (int) ISSUER.HTTP_STATUS_CODE._303:
+                    return ISSUER.HTTP_STATUS.DUPLICATE_TRANSACTION;
+                case (int) ISSUER.HTTP_STATUS_CODE._400:
+                    return ISSUER.HTTP_STATUS.REJECTED_DUE_TO_VALIDATION;
+                case (int)ISSUER.HTTP_STATUS_CODE._403:
+                    return ISSUER.HTTP_STATUS.URL_NOT_PERMITTED;
+                case (int)ISSUER.HTTP_STATUS_CODE._500:
+                    return ISSUER.HTTP_STATUS.INTERNAL_SERVER_ERROR;
+                case (int)ISSUER.HTTP_STATUS_CODE._503:
+                    return ISSUER.HTTP_STATUS.DUE_TO_CONNECTIVITY;
+                case (int)ISSUER.HTTP_STATUS_CODE._504:
+                    return ISSUER.HTTP_STATUS.TIME_OUT_DUE_TO_CONNECTIVITY;
 
-                case (int) ISSUER.HTTP_STATUS_CODE.WRONG_USER_CREDENTIALS:
+                case (int) ISSUER.HTTP_STATUS_CODE._401:
                     switch (errorCode) {
                         case (int) ISSUER.ERROR_CODE._9125:
-                            return ISSUER.HTTP_STATUS_CODE.WRONG_CERTIFICATE;
+                            return ISSUER.HTTP_STATUS.WRONG_CERTIFICATE;
                         default:
-                            return ISSUER.HTTP_STATUS_CODE.WRONG_USER_CREDENTIALS;
+                            return ISSUER.HTTP_STATUS.WRONG_USER_CREDENTIALS;
                     }
                     
-                case (int) ISSUER.HTTP_STATUS_CODE.RESOURCE_NOT_FOUND:
+                case (int) ISSUER.HTTP_STATUS_CODE._404:
                     switch (errorCode) {
                         case (int) ISSUER.ERROR_CODE._3001:
-                            return ISSUER.HTTP_STATUS_CODE.INVALID_PAN;
+                            return ISSUER.HTTP_STATUS.INVALID_PAN;
                         default:
-                            return ISSUER.HTTP_STATUS_CODE.RESOURCE_NOT_FOUND;
+                            return ISSUER.HTTP_STATUS.RESOURCE_NOT_FOUND;
                     }
 
                 default:
-                    return ISSUER.HTTP_STATUS_CODE.SUCCESS;
+                    return ISSUER.HTTP_STATUS.SUCCESS;
             }
+        }
+
+        public static int? DetectErrorCode(this string response)
+        {
+            var matches = Regex.Matches(response, ERROR_CODE_FORMAT);
+            if(matches.Count > 0)
+            {
+                var match = matches[0];
+                if(match.Groups.Count >= 1)
+                {
+                    return 
+                        int.TryParse(match.Groups[1].ToString(), out int errorCode)
+                        ? errorCode
+                        : -1;
+                }
+            }
+            return null;
         }
     }
 }

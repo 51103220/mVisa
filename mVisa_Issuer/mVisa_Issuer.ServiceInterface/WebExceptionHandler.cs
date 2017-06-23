@@ -23,12 +23,13 @@ namespace mVisa_Issuer.ServiceInterface
             var statusCode = (int)errorResponse.StatusCode;
             Log.Error(statusCode);
             Log.Error(resp);
-            
-            var status = Helper.DetectHttpStatus(statusCode, null);
+
+            var errorCode = resp.DetectErrorCode();
+            var status = Helper.DetectHttpStatus(statusCode, errorCode);
             switch (status)
             {
-                case HTTP_STATUS_CODE.TIME_OUT :
-                case HTTP_STATUS_CODE.DUPLICATE_TRANSACTION :
+                case HTTP_STATUS.TIME_OUT :
+                case HTTP_STATUS.DUPLICATE_TRANSACTION :
                     var baseResponseDto = JsonSerializer.DeserializeFromString<BaseResponseDto>(resp);
                     var statusIdentifier = baseResponseDto?.StatusIdentifier;
                     source = isPost 
@@ -36,9 +37,9 @@ namespace mVisa_Issuer.ServiceInterface
                         : source;
                     var getResponse = await source.Get<T>();
                     return getResponse;
-                case HTTP_STATUS_CODE.RESOURCE_NOT_FOUND:
+                case HTTP_STATUS.RESOURCE_NOT_FOUND:
                     throw new GETRequestHasBeenSentException(source);
-                case HTTP_STATUS_CODE.INTERNAL_SERVER_ERROR:
+                case HTTP_STATUS.INTERNAL_SERVER_ERROR:
                     throw new TransactionStatusIsNotKnownException(source);
                 default:
                     throw new UnableToIdentifyErrorException(resp);

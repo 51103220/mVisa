@@ -23,6 +23,7 @@ namespace Common
         public const string LAST_DIGIT_IN_CURRENT_YEAR = "[0-9]{1}";
         public const string CURRENT_DAY_IN_YEAR = "([0-2]{1}[0-9]{2})|(3[0-6]{2})";
         public const string HOUR_2_DIGITS = "([0-1]{1}[0-9]{1})|(2[0-3]{1})";
+        public const string ERROR_CODE_FORMAT = "Error: ([0-9]+)";
         public const string POST = "POST";
         public const string GET = "GET";
 
@@ -100,18 +101,35 @@ namespace Common
             /// Based on Visa Developer Document 2017
             /// </summary>
             public enum HTTP_STATUS_CODE {
-                SUCCESS = 200,
-                TIME_OUT = 202,
-                DUPLICATE_TRANSACTION = 303,
-                REJECTED_DUE_TO_VALIDATION = 400,
-                WRONG_USER_CREDENTIALS = 401,
-                WRONG_CERTIFICATE = 401,
-                URL_NOT_PERMITTED = 403,
-                RESOURCE_NOT_FOUND = 404,
-                INVALID_PAN = 404,
-                INTERNAL_SERVER_ERROR = 500,
-                DUE_TO_CONNECTIVITY = 503,
-                TIME_OUT_DUE_TO_CONNECTIVITY = 504
+                _200 = 200,
+                _202 = 202,
+                _303 = 303,
+                _400 = 400,
+                _401 = 401,
+                _403 = 403,
+                _404 = 404,
+                _500 = 500,
+                _503 = 503,
+                _504 = 504
+            }
+
+            /// <summary>
+            /// Based on Visa Developer Document 2017
+            /// </summary>
+            public enum HTTP_STATUS
+            {
+                SUCCESS,
+                TIME_OUT,
+                DUPLICATE_TRANSACTION,
+                REJECTED_DUE_TO_VALIDATION,
+                WRONG_USER_CREDENTIALS,
+                WRONG_CERTIFICATE,
+                URL_NOT_PERMITTED,
+                RESOURCE_NOT_FOUND,
+                INVALID_PAN,
+                INTERNAL_SERVER_ERROR,
+                DUE_TO_CONNECTIVITY,
+                TIME_OUT_DUE_TO_CONNECTIVITY
             }
 
             /// <summary>

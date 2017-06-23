@@ -23,7 +23,6 @@ namespace Common
         public const string LAST_DIGIT_IN_CURRENT_YEAR = "[0-9]{1}";
         public const string CURRENT_DAY_IN_YEAR = "([0-2]{1}[0-9]{2})|(3[0-6]{2})";
         public const string HOUR_2_DIGITS = "([0-1]{1}[0-9]{1})|(2[0-3]{1})";
-        public const string ERROR_CODE_FORMAT = "Error: ([0-9]+)";
         public const string POST = "POST";
         public const string GET = "GET";
 
@@ -51,6 +50,7 @@ namespace Common
             public const string VIA = "Via";
             public const string FORWARDED = "Forwarded";
             public const string X_TRANSACTION_TIMEOUT_MS = "X-Transaction-Timeout-MS";
+            public const string X_APPLICATION_ERROR_CODE = "x-application-error-code";
         }
 
         public static class M_VISA
@@ -122,6 +122,7 @@ namespace Common
                 TIME_OUT,
                 DUPLICATE_TRANSACTION,
                 REJECTED_DUE_TO_VALIDATION,
+                GET_REQUEST_HAS_BEEN_SENT,
                 WRONG_USER_CREDENTIALS,
                 WRONG_CERTIFICATE,
                 URL_NOT_PERMITTED,

@@ -78,7 +78,14 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ApiUtils.cs" />
+    <Compile Include="Exceptions\InvalidPrimaryAccountNumberException.cs" />
+    <Compile Include="Exceptions\NetworkConnectivityTimeoutException.cs" />
+    <Compile Include="Exceptions\NetworkConnectivityException.cs" />
+    <Compile Include="Exceptions\UrlAccessNotPermitedException.cs" />
+    <Compile Include="Exceptions\UnmatchedCertificateException.cs" />
+    <Compile Include="Exceptions\WrongUserCredentialsException.cs" />
     <Compile Include="Exceptions\UnableToIdentifyErrorException.cs" />
+    <Compile Include="Exceptions\MessageValidationErrorException.cs" />
     <Compile Include="Exceptions\UrlNotExistsException.cs" />
     <Compile Include="Exceptions\TransactionStatusIsNotKnownException.cs" />
     <Compile Include="Exceptions\GETRequestHasBeenSentException.cs" />

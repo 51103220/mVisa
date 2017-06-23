@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Globalization;
 using System.Linq;
-using System.Text.RegularExpressions;
+using System.Net;
 using static Common.Constants;
 
 namespace Utils
@@ -99,8 +99,6 @@ namespace Utils
                     return ISSUER.HTTP_STATUS.TIME_OUT;
                 case (int) ISSUER.HTTP_STATUS_CODE._303:
                     return ISSUER.HTTP_STATUS.DUPLICATE_TRANSACTION;
-                case (int) ISSUER.HTTP_STATUS_CODE._400:
-                    return ISSUER.HTTP_STATUS.REJECTED_DUE_TO_VALIDATION;
                 case (int)ISSUER.HTTP_STATUS_CODE._403:
                     return ISSUER.HTTP_STATUS.URL_NOT_PERMITTED;
                 case (int)ISSUER.HTTP_STATUS_CODE._500:
@@ -110,6 +108,14 @@ namespace Utils
                 case (int)ISSUER.HTTP_STATUS_CODE._504:
                     return ISSUER.HTTP_STATUS.TIME_OUT_DUE_TO_CONNECTIVITY;
 
+                case (int)ISSUER.HTTP_STATUS_CODE._400:
+                    switch (errorCode)
+                    {
+                        case (int)ISSUER.ERROR_CODE._3001: 
+                            return ISSUER.HTTP_STATUS.REJECTED_DUE_TO_VALIDATION;
+                        default:
+                            return ISSUER.HTTP_STATUS.GET_REQUEST_HAS_BEEN_SENT;
+                    }
                 case (int) ISSUER.HTTP_STATUS_CODE._401:
                     switch (errorCode) {
                         case (int) ISSUER.ERROR_CODE._9125:
@@ -117,7 +123,6 @@ namespace Utils
                         default:
                             return ISSUER.HTTP_STATUS.WRONG_USER_CREDENTIALS;
                     }
-                    
                 case (int) ISSUER.HTTP_STATUS_CODE._404:
                     switch (errorCode) {
                         case (int) ISSUER.ERROR_CODE._3001:
@@ -125,26 +130,20 @@ namespace Utils
                         default:
                             return ISSUER.HTTP_STATUS.RESOURCE_NOT_FOUND;
                     }
-
                 default:
                     return ISSUER.HTTP_STATUS.SUCCESS;
             }
         }
 
-        public static int? DetectErrorCode(this string response)
+        public static int? DetectErrorCode(this WebResponse response)
         {
-            var matches = Regex.Matches(response, ERROR_CODE_FORMAT);
-            if(matches.Count > 0)
-            {
-                var match = matches[0];
-                if(match.Groups.Count >= 1)
-                {
-                    return 
-                        int.TryParse(match.Groups[1].ToString(), out int errorCode)
-                        ? errorCode
-                        : -1;
-                }
+            var xAppErrorCode = response.Headers[HTTP_HEADER.X_APPLICATION_ERROR_CODE];
+            
+            int errorCode;
+            if(int.TryParse(xAppErrorCode, out errorCode)) {
+                return errorCode;
             }
+
             return null;
         }
     }

@@ -3,6 +3,8 @@ using ServiceStack;
 using ServiceStack.Testing;
 using mVisa_Acquirer.ServiceInterface;
 using Utils;
+using System;
+using System.Globalization;
 
 namespace mVisa_Acquirer.Tests {
     [TestFixture]
@@ -23,10 +25,28 @@ namespace mVisa_Acquirer.Tests {
         }
 
         [Test]
-        public void Test_Local_Transaction_Time_Format() {
+        public void Test_Time_Span_AM()
+        {
+            var localTransactionTime = "091150";
+            TimeSpan val;
+            Assert.That(TimeSpan.TryParseExact(localTransactionTime, "hhmmss", CultureInfo.InvariantCulture, out val), Is.True);
+
+        }
+
+        [Test]
+        public void Test_Time_Span_PM() {
             var localTransactionTime = "141150";
-            Assert.That(Helper.MatchDateTimeFormat
-                (localTransactionTime, Common.Constants.LOCAL_TRANSACTION_TIME_FORMAT), Is.True);
+            TimeSpan val;            
+            Assert.That(TimeSpan.TryParseExact(localTransactionTime, "hhmmss", CultureInfo.InvariantCulture, out val), Is.True);
+
+        }
+
+        [Test]
+        public void Test_Time_Span_Fails()
+        {
+            var localTransactionTime = "251150";
+            TimeSpan val;
+            Assert.That(TimeSpan.TryParseExact(localTransactionTime, "hhmmss", CultureInfo.InvariantCulture, out val), Is.False);
 
         }
     }

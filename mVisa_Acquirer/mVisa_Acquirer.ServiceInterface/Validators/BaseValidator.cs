@@ -24,7 +24,7 @@ namespace mVisa_Acquirer.ServiceInterface.Validators
             RuleFor(x => x.LocalTransactionTime)
                 .NotNull()
                 .NotEmpty()
-                .Must(r => r.MatchDateTimeFormat(Common.Constants.LOCAL_TRANSACTION_TIME_FORMAT));
+                .Must(r => r.MatchTimeSpanFormat(Common.Constants.LOCAL_TRANSACTION_TIME_FORMAT));
             RuleFor(x => x.LocalTransactionDate)
                .NotNull()
                .NotEmpty()

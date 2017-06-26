@@ -31,7 +31,18 @@ namespace Utils
             DateTime expectedDate;
             return DateTime.TryParseExact(str, format, CultureInfo.InvariantCulture, DateTimeStyles.None, out expectedDate);
         }
-        
+        /// <summary>
+        /// Check if a string matches time span format
+        /// </summary>
+        /// <param name="str"></param>
+        /// <param name="format"></param>
+        /// <returns></returns>
+        public static bool MatchTimeSpanFormat(this string str, string format)
+        {
+            TimeSpan expectedTimeSpan;
+            return TimeSpan.TryParseExact(str, format, CultureInfo.InvariantCulture, out expectedTimeSpan);
+        }
+
         /// <summary>
         /// Pattern of positive integer number string has length from min to max
         /// </summary>
